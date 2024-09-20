@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * @author  chris
  * @className DemoController
@@ -37,5 +40,16 @@ public class DemoController {
             LOGGER.error("测试动态sql解析 error",e);
             return ResultUtils.wrapResult("-1","测试动态SQL解析失败");
         }
+    }
+
+    @Operation(summary = "测试日期转换")
+    @RequestMapping(value = "/testDate",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<String> testDate(){
+        String ymd=DateTimeFormatter.ofPattern("yyyyMM").format(LocalDate.now())+"01";
+        String today=DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now());
+        for (int i = Integer.parseInt(ymd); i <= Integer.parseInt(today); i++) {
+            LOGGER.info("执行第：{}次。",i);
+        }
+        return ResultUtils.wrapResult("00000","测试完毕！");
     }
 }
